@@ -13,7 +13,7 @@ Graet thanks to Ergys Ristani for letting us to use his code!
 If you have any problems or come across any bugs, please contact cwwu@media.ee.ntu.edu.tw.
 
 
-## Requirements
+## Requirement
 - MATLAB (tested on Windows only with MATLAB R2016b & 2013a)
   
 
