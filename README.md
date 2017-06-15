@@ -18,7 +18,6 @@ If you have any problems or come across any bugs, please contact cwwu@media.ee.n
   
 
 ## Usage
-=====
 
 Run `demoDukeMTMCEvaluate.m` and it will compute T-MCT and MCT score for DukeMTMC's baseline results on the "val" set.
 
@@ -78,4 +77,6 @@ More detail can be found in our paper.
 ## License
 View License.txt.
 
-**Updated by Chih-Wei Wu at June. 2017.**
+------
+
+**Updated by Chih-Wei Wu on June. 2017.**
