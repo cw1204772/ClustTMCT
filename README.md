@@ -71,11 +71,11 @@ More detail can be found in our paper.
 
 ## Reference
 
-1. Track-clustering Error Evaluation for Track-based Multi-Camera Tracking System Employing Human Re-identification. CW. Wu, MT. Zhong, SY. Chien, YK. Chen, SW. Yang, Y. Tsao. CVPR 2017 workshop on re-identification and multi-target multi-camera tracking.
-2. Performance Measures and a Data Set for Multi-Target, Multi-Camera Tracking. E. Ristani, F. Solera, R. S. Zou, R. Cucchiara and C. Tomasi. ECCV 2016 Workshop on Benchmarking Multi-Target Tracking.
+1. Track-clustering Error Evaluation for Track-based Multi-Camera Tracking System Employing Human Re-identification. CW. Wu, MT. Zhong, SY. Chien, YK. Chen, SW. Yang, Y. Tsao. CVPR 2017 workshop on re-identification and multi-target multi-camera tracking.[[pdf]](https://www.dropbox.com/s/mjzrtrtnqi74vp4/Track-clustering%20Error%20Evaluation_ShaoYi%2C%20Yu.pdf?dl=0)
+2. Performance Measures and a Data Set for Multi-Target, Multi-Camera Tracking. E. Ristani, F. Solera, R. S. Zou, R. Cucchiara and C. Tomasi. ECCV 2016 Workshop on Benchmarking Multi-Target Tracking.[[pdf]](https://users.cs.duke.edu/~tomasi/papers/ristani/ristaniBmtt16.pdf)
 
 ## License
-View License.txt.
+View LICENSE.txt.
 
 ------
 
