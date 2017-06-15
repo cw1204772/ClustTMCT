@@ -1,4 +1,7 @@
-DukeMTMC Tracking Challenge
+# DukeMTMC Tracking Challenge
+
+**This is a fork of the evaluation kit provided by DukeMTMC**
+
 ==================================
 ---- http://motchallenge.net -----
 http://vision.cs.duke.edu/DukeMTMC
@@ -12,12 +15,12 @@ It extends the motchallenge devkit v1.1 with the DukeMTMC identity measures of p
 Please report bugs to ristani@cs.duke.edu or anton.milan@adelaide.edu.au
 
 
-Requirements
+## Requirements
 ============
-- MATLAB (tested on Windows only with MATLAB R2016b)
+- MATLAB (tested on Windows only with MATLAB R2016b & 2013a)
   
 
-Usage
+## Usage
 =====
 
 You can run demoDukeMTMCEvaluate and it will compute the baseline results on the set trainval_mini.

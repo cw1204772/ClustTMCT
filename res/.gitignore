@@ -1,0 +1,6 @@
+# This is a folder for MCT results, put your tracking results in this folder.
+# A baseline result provided by DukeMTMC will be downloaded here automaticly for demo.
+# Ignore everything in this directory
+*
+# Except this file
+!.gitignore

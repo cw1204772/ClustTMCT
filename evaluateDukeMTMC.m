@@ -1,4 +1,4 @@
-function result = myevaluateDukeMTMC(resMat, iou_threshold, world, testSet)
+function result = evaluateDukeMTMC(resMat, iou_threshold, world, testSet)
 
 ROI = getROIs();
 
@@ -18,22 +18,10 @@ elseif strcmp(testSet,'trainval_mini') % shorter version of trainval
     load('gt/trainval.mat');
     gtMat = trainData;
     testInterval = [127720:187540];
-elseif strcmp(testSet,'trainval_mini_1min') % shorter version of trainval
-    load('gt/trainval.mat');
-    gtMat = trainData;
-    testInterval = [127720:131319];
-elseif strcmp(testSet,'val') % shorter version of trainval
+elseif strcmp(testSet,'val') % appox. last 25 min. of trainval
     load('gt/trainval.mat');
     gtMat = trainData;
     testInterval = [139611:227540];
-elseif strcmp(testSet,'test') % shorter version of trainval
-    load('gt/trainval.mat');
-    gtMat = trainData;
-    testInterval = [173595:227540];
-elseif strcmp(testSet, 'toy')
-    trainData = dlmread('gt/toy_gt.txt');
-    gtMat = trainData;
-    testInterval = [1:200];
 else
     fprintf('Unknown test set %s\n',testSet);
     return;
@@ -43,14 +31,12 @@ end
 
 % Filter rows by frame interval
 startTimes = [5543, 3607, 27244, 31182, 1, 22402, 18968, 46766];
-%startTimes = [1, 1, 1, 1, 1, 1, 1, 1];
 for cam = 1:8
     gtMat(gtMat(:,1) == cam & ~ismember(gtMat(:,3) + startTimes(cam) - 1, testInterval),:) = [];
     resMat(resMat(:,1) == cam & ~ismember(resMat(:,3) + startTimes(cam) - 1, testInterval),:) = [];
 end
 
 % Filter rows by feet position within ROI
-
 feetpos = [ resMat(:,4) + 0.5*resMat(:,6), resMat(:,5) + resMat(:,7)];
 keep = false(size(resMat,1),1);
 for cam = 1:8
@@ -60,46 +46,16 @@ end
 
 resMat = resMat(keep,:);
 
-%{
-% Filter the result tracklets with duration smaller than a threshold to speed up evaluation
-fprintf('filtering tracklets to speed up evaluation...\n');
-tracklet_th = 10;
-% Mat is in format [cam, ID, frame, x, y, w, h]
-resID = unique(resMat(:, 2));
-length(resID)
-len_stats = zeros(1, length(resID));
-for i = 1:length(resID)
-    ID = resID(i);
-    match_idx = (resMat(:,2) == ID);
-    len = sum(match_idx(:));
-    if len < tracklet_th
-        resMat(match_idx, :) = [];
-    end
-    len_stats(1, i) = len;
-    if mod(i, floor(length(resID)/10)) == 0
-        fprintf('%d%% \n', floor(100.*i/length(resID)));
-    end
-end
-resID = unique(resMat(:, 2));
-length(resID)
-%}
-
 % Single-Cam
-resTracklet = []; 
 for camera = 1:8
     fprintf('Processing camera %d...\n',camera);
     resMatSingle = resMat(resMat(:,1)==camera, 2:7);
     gtMatSingle = gtMat(gtMat(:,1)==camera, 2:7);
-    [clust_measures, resTracklet_single] = CLUSTmeasures(resMatSingle, gtMatSingle, iou_threshold, world);
-    resTracklet = [resTracklet; resTracklet_single];
+    clust_measures = CLUSTmeasures(resMatSingle, gtMatSingle, iou_threshold, world);
     measures = IDmeasures(resMatSingle, gtMatSingle, iou_threshold, world);
     result{camera}.CLUSTmeasures = clust_measures;
     result{camera}.IDmeasures = measures;
     result{camera}.description = sprintf('Cam_%d',camera);
-    %result{camera}.allMets = evaluateTracking(result{camera}.description, gtMatSingle, resMatSingle);
-    %result{camera}.allMets.mets2d.m = [measures.IDF1, measures.IDP, measures.IDR, result{camera}.allMets.mets2d.m];
-    %fprintf('clustP = %f, clustR= %f', clust_measures.clustP, clust_measures.clustR);
-    
 end
 fprintf('\n');
 
@@ -120,10 +76,6 @@ result{10}.IDmeasures = IDmeasures(resMatMulti, gtMatMulti, iou_threshold, world
 %result{10}.CLUSTmeasures = CLUSTmeasures(resMatMulti, gtMatMulti, iou_threshold, world);
 % Constructing clust_mat from clust_mat from each camera is faster than reconstructing
 result{10}.CLUSTmeasures = CLUSTmeasures_aggregate(result, 8);
-
-result{10}.LINKmeasures = LINKmeasures(resTracklet);
-
-
 
 % AllCameraSingle (MC Upper bound) 
 gtMatSingleAll = gtMat(:,2:7);
@@ -164,20 +116,6 @@ else
         CLUSTFN = CLUSTFN + result{cam}.CLUSTmeasures.FN;
         CLUSTTN = CLUSTTN + result{cam}.CLUSTmeasures.TN;
         
-        %MT = MT + result{cam}.allMets.mets2d.additionalInfo.MT;
-        %PT = PT + result{cam}.allMets.mets2d.additionalInfo.PT;
-        %ML = ML + result{cam}.allMets.mets2d.additionalInfo.ML;
-        %FRA = FRA + result{cam}.allMets.mets2d.additionalInfo.FRA;
-        %Fgt = Fgt + result{cam}.allMets.mets2d.additionalInfo.Fgt;
-        %Ngt = Ngt + result{cam}.allMets.mets2d.additionalInfo.Ngt;
-        %Nc = Nc + sum(result{cam}.allMets.mets2d.additionalInfo.c);
-        %sumg = sumg + sum(result{cam}.allMets.mets2d.additionalInfo.g);
-        %falsepositives = falsepositives + sum(result{cam}.allMets.mets2d.additionalInfo.fp);
-        %missed = missed + sum(result{cam}.allMets.mets2d.additionalInfo.m);
-        %idswitches = idswitches + sum(result{cam}.allMets.mets2d.additionalInfo.mme);
-        %ious = result{cam}.allMets.mets2d.additionalInfo.ious;
-        %td = result{cam}.allMets.mets2d.additionalInfo.td;
-        %iousum = iousum + sum(ious(ious>=td & ious<Inf));
     end
     
     CLUSTPrecision = CLUSTTP / (CLUSTTP + CLUSTFP);
@@ -205,16 +143,6 @@ else
     measures.IDFN = IDFN;
     result{9}.IDmeasures = measures;
     
-    %FAR = falsepositives / Fgt;
-    %MOTP=iousum/Nc * 100; % avg ol
-    %MOTAL=(1-(missed+falsepositives+log10(idswitches+1))/sumg)*100;
-    %MOTA=(1-(missed+falsepositives+idswitches)/sumg)*100;
-    %recall=Nc/sumg*100;
-    %precision=Nc/(falsepositives+Nc)*100;
-    
-    %metrics=[recall, precision, FAR, Ngt, MT, PT, ML, falsepositives, missed, idswitches, FRA, MOTA, MOTP, MOTAL];
-    %result{9}.allMets.mets2d.m = metrics;
 end
 
-%result{9}.allMets.mets2d.m = [measures.IDF1, measures.IDP, measures.IDR, result{9}.allMets.mets2d.m];
 
