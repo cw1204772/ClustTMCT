@@ -1,4 +1,4 @@
-# DukeMTMC Tracking Challenge Evaluation Kit
+# Clust Measures for Track-based Multi-camera Tracking
 
 **Implementation of _"Track-clustering Error Evaluation for Track-based Multi-Camera Tracking System Employing Human Re-identification". CW. Wu, MT. Zhong, SY. Chien, YK. Chen, SW. Yang, Y. Tsao. CVPR 2017 workshop on re-identification and multi-target multi-camera tracking.[1]_**
 
