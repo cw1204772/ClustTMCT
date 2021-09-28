@@ -1,5 +1,0 @@
-# This is a folder for ground truth data, which will be automatic downloaded upon executing demoDukeMTMCEvaluation.m.
-# Ignore everything in this directory
-*
-# Except this file
-!.gitignore
